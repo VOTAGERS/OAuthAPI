@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Department {
+  IdDepartment    Int       @id @default(autoincrement()) 
+  DepartmentCode  String   
+  DepartmentName  String
+  DateCreated     DateTime @default(now())
+
+  SystemPersonal SystemPersonal[]
+}
+
+model RoleOn {
+  IdRoleOn          Int   @id @default(autoincrement())
+  RoleName          String
+  DateCreated       DateTime @default(now())
+
+  SystemPersonal    SystemPersonal[]
+}
+
+model SystemPersonal {
+  IdPerson         Int   @id @default(autoincrement())  
+  Username         String
+  Password         String  
+  UserEmail        String
+  Status           String?
+  DateCreated      DateTime @default(now())
+
+  IdRoleOn         Int  @default(1)
+  IdDepartment     Int
+
+  Department      Department @relation(fields: [IdDepartment], references: [IdDepartment])
+  RoleOn          RoleOn @relation(fields: [IdRoleOn], references: [IdRoleOn])
+}
